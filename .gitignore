@@ -1,0 +1,42 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Blender specific
+*.blend1
+*.blend2
+*.blend@
+*.blend
+*.blend~
+
+# Blender cache
+*.cache/
+*.autosave/
+
+# MacOS specific
+.DS_Store
+
+# Windows specific
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Logs
+*.log
+
+# VSCode settings (if using VSCode)
+.vscode/
+
+# Addon zip archives
+*.zip
+
+# Backup or temp files
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Python virtual environment
+venv/
+.env/
