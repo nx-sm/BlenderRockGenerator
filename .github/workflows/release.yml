@@ -1,0 +1,51 @@
+name: LPRocks Addon Release
+
+on:
+  push:
+    tags:
+      - 'v*' # Only run when a version tag is pushed (like v1.0.0)
+
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set version variable
+      id: vars
+      run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+    - name: Check if release already exists
+      id: check_release
+      run: |
+        RELEASE_EXISTS=$(gh release view "$VERSION" --json name -q .name || echo "")
+        if [ -n "$RELEASE_EXISTS" ]; then
+          echo "Release $VERSION already exists."
+          exit 1
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Set up addon folder
+      run: |
+        mkdir addon
+        cp __init__.py addon/
+        cp operators.py addon/
+        cp panel.py addon/
+        cp properties.py addon/
+        cp README.md addon/
+        cp LPRocks.jpg addon/
+
+    - name: Zip addon with version
+      run: |
+        cd addon
+        zip -r ../LPRocks_${{ env.VERSION }}.zip .
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: LPRocks_${{ env.VERSION }}.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
